@@ -4,22 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="مجموعه پرسش‌ها و پاسخ‌ها">
-  <title>پرسش‌ها و پاسخ‌ها</title>
+  <title>بررسی</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="topbar">
-    <div class="site-title" aria-hidden="true"></div>
-    <button id="toggleButton" class="toggle-button" type="button" aria-controls="qaContent" aria-expanded="true">
-      مخفی‌سازی
-    </button>
+    <strong class="brand">بررسی</strong>
+    <button id="applyButton" class="apply-button" type="button" aria-expanded="true" aria-controls="qaList">اعمال</button>
   </header>
-
-  <main id="qaContent" class="content">
-    <div id="qaList" class="qa-list" aria-live="polite"></div>
+  <main class="page">
+    <div class="intro">
+      <h1>پرسش‌ها و پاسخ‌ها</h1>
+      <p id="countLabel">در حال بارگذاری...</p>
+    </div>
+    <section id="qaList" class="qa-list" aria-live="polite"></section>
   </main>
-
-  <noscript>برای نمایش پرسش‌ها و پاسخ‌ها، جاوااسکریپت مرورگر را فعال کنید.</noscript>
+  <script src="questions.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

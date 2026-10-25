@@ -1,42 +1,46 @@
-const qaList = document.getElementById("qaList");
-const qaContent = document.getElementById("qaContent");
-const toggleButton = document.getElementById("toggleButton");
+(() => {
+  const list = document.getElementById('qaList');
+  const button = document.getElementById('applyButton');
+  const countLabel = document.getElementById('countLabel');
+  const data = Array.isArray(window.QA_DATA) ? window.QA_DATA : [];
 
-function addTextElement(tagName, className, text) {
-  const element = document.createElement(tagName);
-  element.className = className;
-  element.textContent = text;
-  return element;
-}
-
-fetch("questions.json")
-  .then((response) => {
-    if (!response.ok) throw new Error("بارگذاری پرسش‌ها ناموفق بود.");
-    return response.json();
-  })
-  .then((items) => {
-    items.forEach((item, index) => {
-      const article = document.createElement("article");
-      article.className = "qa-item";
-
-      const question = addTextElement("h2", "question", item.question);
-      question.id = `question-${index + 1}`;
-      article.appendChild(question);
-
-      if (item.answer.trim()) {
-        article.appendChild(addTextElement("p", "answer", item.answer));
-      }
-
-      qaList.appendChild(article);
-    });
-  })
-  .catch(() => {
-    qaList.textContent = "پرسش‌ها بارگذاری نشدند. لطفاً فایل questions.json و مسیر پروژه را بررسی کنید.";
+  data.forEach((item, index) => {
+    const card = document.createElement('article');
+    card.className = 'qa-card';
+    const question = document.createElement('h2');
+    question.className = 'question';
+    question.textContent = `${(index + 1).toLocaleString('fa-IR')}. ${item.question}`;
+    const answer = document.createElement('div');
+    answer.className = 'answer';
+    answer.textContent = item.answer;
+    card.append(question, answer);
+    list.append(card);
   });
 
-toggleButton.addEventListener("click", () => {
-  const shouldFade = !qaContent.classList.contains("is-faded");
-  qaContent.classList.toggle("is-faded", shouldFade);
-  toggleButton.textContent = "اعمال";
-  toggleButton.setAttribute("aria-expanded", String(!shouldFade));
-});
+  countLabel.textContent = `${data.length.toLocaleString('fa-IR')} پرسش و پاسخ`;
+  let visible = true;
+  let animating = false;
+  button.addEventListener('click', () => {
+    if (animating) return;
+    animating = true;
+    if (visible) {
+      list.classList.add('is-fading');
+      window.setTimeout(() => {
+        list.classList.add('is-hidden');
+        list.classList.remove('is-fading');
+        button.setAttribute('aria-expanded', 'false');
+        visible = false;
+        animating = false;
+      }, 230);
+    } else {
+      list.classList.remove('is-hidden');
+      list.classList.add('is-fading');
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        list.classList.remove('is-fading');
+        button.setAttribute('aria-expanded', 'true');
+        visible = true;
+        window.setTimeout(() => { animating = false; }, 230);
+      }));
+    }
+  });
+})();
